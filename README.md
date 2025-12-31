@@ -1,16 +1,21 @@
 # Healthcare-Cost-Predictor
-Predicting healthcare costs is notoriously difficult because patient data is a mix of categories (like severity of illness) and numbers (like facility IDs). For this project, I built a robust machine learning pipeline to automate these predictions using the New York State Department of Health dataset.
 
-Why I used a Pipeline: Instead of cleaning the data manually every time, I used a Scikit-Learn Pipeline. This ensures that the StandardScaler (for numbers) and the OneHotEncoder (for categories) are applied consistently to both training and testing data, preventing "data leakage".
+Predicting healthcare costs is a huge challenge because the data is "noisy"—you have different hospitals, various illness severities, and hundreds of different types of treatments. I wanted to see if I could build a model that looks at over 2.1 million patient records and finds the patterns in how people are billed in New York State.
+Unlike my other projects that were about categories (like Spam vs. Not Spam), this project is about scale. I had to figure out how to pull an 800MB dataset directly into the cloud and process it without crashing the system.
 
-The Technical Highlights:
+How I Built It:
+I didn't just throw the data into an algorithm. I built a Scikit-Learn Pipeline to handle the heavy data:
+Because the file was so large, I used gdown to bypass Google's "Virus Scan" block and low_memory=False to make sure the computer could read all 36 columns correctly.
 
-The Model: I chose Ridge Regression. This is more advanced than basic linear regression because it uses L2 Regularization to prevent the model from becoming too sensitive to outliers in the data.
-Cross-Validation: I didn't just pick a random setting; I tested multiple "alpha" values ($0.1$ to $250$) using 5-fold Cross-Validation to find the most stable version of the model.
-Performance: The model achieved an $R^2$ of 0.708 on the hold-out set, meaning it explains over 70% of the variance in patient costs.
-Error Metric: The Mean Absolute Error (MAE) was $8,043, which provides a realistic window for financial planning in a hospital setting.
+The Pipeline: I used a ColumnTransformer so the model could "see" both numbers (like Facility IDs) and categories (like Severity of Illness) at the same time.
 
-How to use:
-Open the .ipynb file in Colab.
-The notebook processes the SPARCS_De-Identified dataset.
-Run the pipeline to see the ColumnTransformer in action and the final error metrics.
+Ridge Regression (The "Smart" Choice): Instead of a basic regression, I used RidgeCV. It’s a more advanced model that uses a "penalty" (called Alpha) to make sure it doesn't get distracted by outliers. My model found that an Alpha of 100.0 was the "sweet spot" for accuracy.
+
+The Results:
+R^2 Score: 0.708 — This means my model explains about 71% of why medical costs change. In a dataset this massive and messy, 71% is a very strong result.
+Mean Absolute Error: $8,043 — On average, the model's prediction is within about $8k of the actual bill. When you consider some hospital bills are hundreds of thousands of dollars, this is a solid window for financial planning.
+
+How to Run:
+Open medical_treatment_cost.ipynb in Google Colab.
+Hit Run All.
+The script will automatically install gdown, pull the 2.1 million rows, and train the model.
