@@ -12,10 +12,13 @@ The Pipeline: I used a ColumnTransformer so the model could "see" both numbers (
 Ridge Regression (The "Smart" Choice): Instead of a basic regression, I used RidgeCV. It’s a more advanced model that uses a "penalty" (called Alpha) to make sure it doesn't get distracted by outliers. My model found that an Alpha of 100.0 was the "sweet spot" for accuracy.
 
 The Results:
-R^2 Score: 0.708 — This means my model explains about 71% of why medical costs change. In a dataset this massive and messy, 71% is a very strong result.
+R^2 Score: 0.708. This means my model explains about 71% of why medical costs change. In a dataset this massive and messy, 71% is a very strong result.
 Mean Absolute Error: $8,043 — On average, the model's prediction is within about $8k of the actual bill. When you consider some hospital bills are hundreds of thousands of dollars, this is a solid window for financial planning.
 
 How to Run:
 Open medical_treatment_cost.ipynb in Google Colab.
 Hit Run All.
 The script will automatically install gdown, pull the 2.1 million rows, and train the model.
+
+Note: I’ve also included the ridge_treatment_cost_model.pkl file if you want to skip the training and just use the model.
+The ridge_treatment_cost_model.pkl is a serialized version of the final trained pipeline. It is a binary file intended to be loaded via joblib for instant inference and deployment.
